@@ -1,0 +1,18 @@
+{
+    "name": "@kimi/db",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "ISC",
+    "prisma": {
+        "seed": "tsx ./prisma/seed.ts"
+    },
+    "dependencies": {
+        "@prisma/client": "latest"
+    },
+    "devDependencies": {
+        "prisma": "latest",
+        "tsx": "latest",
+        "typescript": "latest",
+        "@types/node": "latest"
+    }
+}

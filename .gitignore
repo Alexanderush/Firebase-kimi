@@ -1,0 +1,46 @@
+# Environment & credentials
+.env*
+!.env.example
+credentials.json
+token.json
+
+# Intermediate / temp files
+.tmp/
+.gemini/
+
+# Next.js / Build output
+.next/
+out/
+build/
+dist/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+package-lock.json
+
+# IDE
+.vscode/
+.idea/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Installers (not needed in repo)
+*.msi
+*.lnk

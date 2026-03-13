@@ -1,0 +1,41 @@
+{
+  "name": "@kimi/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@kimi/engine": "1.0.0",
+    "@next-auth/prisma-adapter": "latest",
+    "@prisma/adapter-pg": "^7.4.1",
+    "@prisma/client": "latest",
+    "bcryptjs": "latest",
+    "clsx": "latest",
+    "lucide-react": "latest",
+    "next": "latest",
+    "next-auth": "latest",
+    "pg": "^8.18.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "reactflow": "latest",
+    "tailwind-merge": "latest",
+    "tailwind-variant-group": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20",
+    "@types/pg": "^8.16.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

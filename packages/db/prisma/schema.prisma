@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  passwordHash  String
+  agencyName    String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  subAccounts   SubAccount[]
+}
+
+model SubAccount {
+  id               String            @id @default(cuid())
+  name             String
+  description      String?
+  clientEmail      String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agents           Agent[]
+  toolConnections  ToolConnection[]
+}
+
+model Agent {
+  id              String            @id @default(cuid())
+  name            String
+  description     String?
+  systemPrompt    String            @db.Text
+  canvasState     Json?             // Stores React Flow state
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  subAccountId    String
+  subAccount      SubAccount        @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  agentTools      AgentTool[]
+  channels        Channel[]
+  conversations   Conversation[]
+  deploymentLinks DeploymentLink[]
+  demoLinks       DemoLink[]
+}
+
+model Tool {
+  id          String      @id @default(cuid())
+  name        String      @unique // e.g., "GOOGLE_CALENDAR"
+  displayName String
+  description String?
+  icon        String?
+  agentTools  AgentTool[]
+  connections ToolConnection[]
+}
+
+model AgentTool {
+  id        String   @id @default(cuid())
+  agentId   String
+  toolId    String
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  tool      Tool     @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([agentId, toolId])
+}
+
+model ToolConnection {
+  id           String     @id @default(cuid())
+  subAccountId String
+  toolId       String
+  accessToken  String     @db.Text
+  refreshToken String?    @db.Text
+  expiresAt    DateTime?
+  tokenType    String?
+  scope        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  subAccount   SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  tool         Tool       @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  @@unique([subAccountId, toolId])
+}
+
+model DeploymentLink {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  agentId   String
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model DemoLink {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  agentId     String
+  agent       Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  title       String?
+  description String?
+  password    String?
+  expiresAt   DateTime?
+  viewCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Channel {
+  id        String      @id @default(cuid())
+  type      ChannelType
+  config    Json?       // Channel-specific config (e.g., webhook secrets)
+  agentId   String
+  agent     Agent       @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@unique([agentId, type])
+}
+
+enum ChannelType {
+  WIDGET
+  WHATSAPP
+  INSTAGRAM
+  MESSENGER
+}
+
+model Conversation {
+  id           String     @id @default(cuid())
+  externalId   String?    // e.g., WhatsApp message ID or Cookie ID
+  agentId      String
+  agent        Agent      @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  channelType  ChannelType
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  messages     Message[]
+
+  @@index([agentId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           MessageRole
+  content        String       @db.Text
+  toolCalls      Json?        // Stores data about tool calls Made by AI
+  createdAt      DateTime     @default(now())
+}
+
+enum MessageRole {
+  SYSTEM
+  USER
+  ASSISTANT
+  TOOL
+}

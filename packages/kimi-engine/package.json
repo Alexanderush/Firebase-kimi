@@ -1,0 +1,14 @@
+{
+    "name": "@kimi/engine",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "dependencies": {
+        "openai": "latest",
+        "zod": "latest",
+        "dotenv": "latest"
+    },
+    "devDependencies": {
+        "typescript": "^5",
+        "@types/node": "^20"
+    }
+}
