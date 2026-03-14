@@ -12,7 +12,7 @@ runConfig:
 env:
   # Public environment variables
   - variable: NEXTAUTH_URL
-    value: https://your-project-id.web.app
+    value: https://kimi-agent-57bb1.web.app
 
   # Secrets (stored in Google Cloud Secret Manager, managed via Firebase Console)
   - variable: DATABASE_URL
